@@ -14,7 +14,7 @@ let fs = require("fs");
 // ];
 
 function saveJSON(filename, newdata) {
-  fs.readFile(`./${filename}.json`, "utf8", function(err, data) {
+  fs.readFile(`../data/${filename}.json`, "utf8", function(err, data) {
     if (err) {
       console.log(err);
     } else {
@@ -27,7 +27,7 @@ function saveJSON(filename, newdata) {
       const json = JSON.stringify(newdata);
       // console.log(json);
 
-      fs.writeFile(`./${filename}.json`, json, "utf8", function(err) {
+      fs.writeFile(`../data/${filename}.json`, json, "utf8", function(err) {
         if (err) {
           console.log(err);
         } else {

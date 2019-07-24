@@ -1,7 +1,7 @@
 const inquirer = require("inquirer");
-const saveJSON = require("./savefile");
+const saveJSON = require("./feature/savefile");
 
-const getInnisfree = require("./getinnisfree");
+const getInnisfree = require("./get/getinnisfree");
 
 const brands = [
   {
@@ -38,13 +38,11 @@ inquirer.prompt(questions).then(async answers => {
     var dataProduct = await brands[select].func();
     await inquirer.prompt(save).then(async answers => {
       if (answers["name"] === "yes" || answers["name"] === "y") {
-        let path =brands[select].name.toLowerCase()
+        let path = brands[select].name.toLowerCase();
         await saveJSON(path, dataProduct);
-    }
+      }
     });
     console.log("complete");
+    // else if(select==="all")
   } else console.log("YOU ENTER INCORRECT PLEASE CHOOSE AGAIN");
-  // else if(select==="all")
 });
-
-// saveJSON("innisfree",dataProduct)
