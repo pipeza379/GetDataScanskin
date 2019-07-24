@@ -14,24 +14,23 @@ let fs = require("fs");
 // ];
 
 function saveJSON(filename, newdata) {
-  fs.readFile(`../data/${filename}.json`, "utf8", function(err, data) {
+  fs.readFile(process.cwd() + `/data/${filename}.json`, "utf8", function(err, data) {
     if (err) {
       console.log(err);
     } else {
       //   APPEND DATA
       //   const file = JSON.parse(data);
       //   newdata = [...file,newdata]
-
-
+      
       //   NEW DATA
       const json = JSON.stringify(newdata);
       // console.log(json);
 
-      fs.writeFile(`../data/${filename}.json`, json, "utf8", function(err) {
+      fs.writeFile(process.cwd() + `/data/${filename}.json`, json, "utf8", function(err) {
         if (err) {
           console.log(err);
         } else {
-          console.log("save")
+          console.log("save");
           //Everything went OK!
         }
       });

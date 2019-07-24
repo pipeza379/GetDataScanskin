@@ -23,7 +23,7 @@ async function fresh() {
         let refs = [];
         refs = [
           ...refs,
-          $(".product-image")
+          ...$(".product-image")
             .map((i, e) => {
               let href = $(e)
                 .find("a")

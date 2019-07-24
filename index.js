@@ -1,5 +1,5 @@
 const inquirer = require("inquirer");
-const saveJSON = require("./feature/savefile");
+const saveJSON = require("./features/savefile");
 
 const getInnisfree = require("./get/getinnisfree");
 

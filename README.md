@@ -3,7 +3,7 @@ DATABASE of SCANSKIN
 
 Number | Brand Name | Status | Completeness
 :---: | --- | --- | ---
-1 | Innisfree | *working...* | `80%`
+1 | Innisfree | *finished* | `100%`
 2 | Fresh | *working...* | `50%`
 3 | Aveda | *waiting* | `0%`
 4 | Loccitane | *waiting* | `0%`

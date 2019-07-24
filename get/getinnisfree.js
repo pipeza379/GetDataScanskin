@@ -1,7 +1,7 @@
 const request = require("request-promise");
 const cheerio = require("cheerio");
 const data = require("../brand");
-const genID = require("../feature/genID");
+const genID = require("../features/genID");
 
 async function getInnisfree() {
   try {
@@ -64,16 +64,18 @@ async function getInnisfree() {
               let desc = $(".pdtDesc")
                 .text()
                 .trim();
+              // desc = desc.split(" ")[0].split("\t").join("").split("\n").join("")
               let price = $(".price")
                 .text()
                 .trim();
+              price=price.split(" ")[0].split("\t").join("").split("\n").join("")
+              price=price.slice(0,(price.length/2))
               let using = $(".howTo > p")
                 .text()
                 .trim();
-              let img = $(".thumbList ul li")
-                .map(li => {
-                  let src = $(li)
-                    .find("img")
+              let img = $(".thumbList ul li span img")
+                .map((i,img) => {
+                  let src = $(img)
                     .attr("src");
                   return base + src;
                 })
@@ -82,15 +84,15 @@ async function getInnisfree() {
                 brand: "innisfree",
                 name,
                 type,
-                // skin:"",
-                // advance_filter:"",
-                // detail:desc,
+                skin:"",
+                advance_filter:"",
+                detail:desc,
                 quantities,
-                // price,
+                price,
                 using,
                 img
               };
-              // console.log(name)
+              // console.log(price)
               return product;
             } catch (err) {
               console.log("error", err);
@@ -121,6 +123,6 @@ async function getInnisfree() {
     console.log("error to connect ", err);
   }
 }
-// innisfree();
+// getInnisfree();
 
 module.exports = getInnisfree;
