@@ -6,12 +6,12 @@ const data = {
       "http://www.innisfree.com/th/th/product/productList.do?catCd01=UA&catCd02=",
     acronym: "INF",
     types: {
-      CLEANSER: "UAFF"
-      // TONER: "UAAA",
-      // SERUME: "UACC",
-      // MOITURIZER: "UABB",
-      // SUNSKIN: "UAGG",
-      // MASK: "UAEE",
+      CLEANSER: "UAFF",
+      TONER: "UAAA",
+      SERUME: "UACC",
+      MOITURIZER: "UABB",
+      SUNSKIN: "UAGG",
+      MASK: "UAEE",
     }
   },
   fresh: {

@@ -1,0 +1,5 @@
+[
+  { "foo": "bar", "qux": "moo", "poo": "123" },
+  { "11": "bar", "qux": "moo", "poo": "123" },
+  { "id": "title1", "year": 2018, "month": 1, "day": 3 }
+]
