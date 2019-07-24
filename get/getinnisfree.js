@@ -1,7 +1,7 @@
 const request = require("request-promise");
 const cheerio = require("cheerio");
-const data = require("./brand");
-const genID = require("./genID");
+const data = require("../brand");
+const genID = require("../feature/genID");
 
 async function getInnisfree() {
   try {

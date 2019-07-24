@@ -1,6 +1,6 @@
 const request = require("request-promise");
 const cheerio = require("cheerio");
-const data = require("./brand");
+const data = require("../brand");
 
 async function fresh() {
   try {
