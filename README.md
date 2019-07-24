@@ -1,4 +1,4 @@
-Scanskin
+DATABASE of SCANSKIN
 ===
 
 Number | Brand Name | Status | Completeness
