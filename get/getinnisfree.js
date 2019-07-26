@@ -90,7 +90,8 @@ async function getInnisfree() {
                 quantities,
                 price,
                 using,
-                img
+                img,
+                link:ref,
               };
               // console.log(price)
               return product;
@@ -112,6 +113,7 @@ async function getInnisfree() {
     let count = 1;
     let dataProduct=[]
     Object.keys(types).map(type => {
+      console.log(listTypes[type])
       listTypes[type].map(product => {
         product.id = genID(acronym,count);
         dataProduct.push(product)

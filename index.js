@@ -1,12 +1,18 @@
 const inquirer = require("inquirer");
-const saveJSON = require("./features/savefile");
+const saveJSON = require("./features/saveJSON");
+const saveXlsx = require("./features/saveXlsx")
 
 const getInnisfree = require("./get/getinnisfree");
+const getFresh = require("./get/getfresh")
 
 const brands = [
   {
     name: "Innisfree",
     func: getInnisfree
+  },
+  {
+    name:"Fresh",
+    func: getFresh
   }
 ];
 
@@ -40,6 +46,7 @@ inquirer.prompt(questions).then(async answers => {
       if (answers["name"] === "yes" || answers["name"] === "y") {
         let path = brands[select].name.toLowerCase();
         await saveJSON(path, dataProduct);
+        await saveXlsx(path, dataProduct);
       }
     });
     console.log("complete");

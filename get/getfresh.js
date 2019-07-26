@@ -1,93 +1,141 @@
-const request = require("request-promise");
-const cheerio = require("cheerio");
-const data = require("../brand");
+const request = require("request-promise")
+const cheerio = require("cheerio")
+const data = require("../brand")
+const genID = require("../features/genID")
 
-async function fresh() {
+async function getFresh() {
   try {
-    const { url, base, types, acronym } = data.fresh;
-    const listTypes = {};
-    // link of skin types
+    const { url, base, types, acronym } = data.fresh
+    const listTypes = {}
     const linksOfTypes = await Object.keys(types).map(type => {
-      return [type, url + types[type]];
-    });
-    console.log(linksOfTypes);
-    const getData = await Promise.all(
+      return [type, url + types[type]]
+    })
+    // console.log("link", linksOfTypes);
+    await Promise.all(
       linksOfTypes.map(async list => {
-        let [type, link] = list;
-        console.log(type, link);
-        const html = await request(link);
-        const $ = cheerio.load(html);
-
-        // find href of all products
-        let i = 0;
-        let refs = [];
+        let [type, link] = list
+        if (type[type.length - 1] === "2") {
+          type = type.slice(0, type.length - 1)
+        }
+        // console.log(type, link);
+        const html = await request(link)
+        const $ = cheerio.load(html)
+        console.log("find", type)
+        let refs = []
         refs = [
           ...refs,
-          ...$(".product-image")
+          ...$(".product-image > a")
             .map((i, e) => {
-              let href = $(e)
-                .find("a")
-                .attr("href");
-              return href;
+              let href = $(e).attr("href")
+              return href
             })
             .get()
-        ];
-        // console.log(refs[0]);
-
-        //get all products
-
-        const data = await Promise.all(
-          refs[0].map(async ref => {
+        ]
+        // console.log(refs);
+        console.log("get link", type, refs.length)
+        let data = await Promise.all(
+          refs.map(async ref => {
             try {
-              const subHtml = await request(ref);
-              // console.log("####",ref)
-              const $ = cheerio.load(subHtml);
+              const subHtml = await request(ref)
+              const $ = cheerio.load(subHtml)
+
               let name = $("#product-content h1")
                 .text()
-                .trim();
+                .trim()
               let quantities = $(".product-variations ul li span")
                 .text()
-                .trim();
-              // let desc = $(".pdtDesc")
-              //   .text()
-              //   .trim();
+                .trim()
+              if (quantities === "") {
+                $(".variation-select.fresh-dd > option").each((i, option) => {
+                  if ($(option).attr("selected") === "selected") {
+                    quantities = $(option)
+                      .text()
+                      .trim()
+                      .split("\t")
+                      .join("")
+                      .split("\n")
+                      .join("")
+                    console.log(name) //this has problem
+                  }
+                })
+              }
               let price = $(".product-price span.price-sales")
                 .text()
-                .trim();
+                .trim()
+
               let using = $(".product-howtouse")
+              using = using
                 .text()
-                  // .trim();
-              let img = $("img.primary-image").attr("src");
-              img = base + img;
-              console.log(using)
+                .split("How to Use")[1]
+                .trim()
+                .split("\t")
+                .join("")
+                .split("\n")
+                .join("")
+
+              let img = $(".product-image > img")
+                .map((i, img) => {
+                  let src =
+                    $(img).attr("src") === ""
+                      ? $(img).attr("data-lazy")
+                      : $(img).attr("src")
+                  return base + src
+                })
+                .get()
+
+              let desc = $(".product-information")
+              desc = desc
+                .text()
+                .split("Product Details")[1]
+                .trim()
+                .split("\t")
+                .join("")
+                .split("\n")
+                .join("")
               let product = {
                 brand: "fresh",
                 name,
                 type,
-                // skin:"",
-                // advance_filter:"",
-                // detail:desc,
+                skin: "",
+                advance_filter: "",
+                detail: desc,
                 quantities,
                 price,
                 using,
-                img
-              };
-              return product;
+                img,
+                link: ref
+              }
+              return product
             } catch (err) {
-              console.log("error", err);
+              console.log("error", err)
             }
           })
-        );
-        listTypes[type] = await data;
-        let typeOfProduct = $("ul.list li.on >a").text();
-        console.log(typeOfProduct, " get :", listTypes[type].length);
-        return listTypes;
+        )
+        listTypes[type] =
+          listTypes[type] === undefined
+            ? await data
+            : [...listTypes[type], ...(await data)]
+        return listTypes
       })
-    );
+    )
+
+    // MAPPING DATA
+    let count = 1
+    let dataProduct = []
+    Object.keys(types).map(type => {
+      if (type[type.length - 1] !== "2") {
+        listTypes[type].map(product => {
+          product.id = genID(acronym, count)
+          dataProduct.push(product)
+          count++
+        })
+      }
+    })
+    return dataProduct
   } catch (err) {
-    console.log("error to connect ", err);
+    console.log("error to connect ", err)
   }
 }
-fresh();
+// getFresh();
 
-// module.exports = innisfree;
+module.exports = getFresh
